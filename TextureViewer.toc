@@ -1,0 +1,19 @@
+﻿## Interface: 50400
+## Title: TextureViewer
+## Notes: Show a texture on demand
+## Version: @project-version@
+## Author: Kemayo
+## eMail: kemayo at gmail dot com
+## X-Category: Development Tools
+## X-Donate: PayPal:kemayo AT gmail DOT com
+
+## OptionalDeps: tekErr
+
+## LoadManagers: AddonLoader
+## X-LoadOn-Slash: /texview
+
+lib\LibStub.lua
+lib\tekKonfigAboutPanel.lua
+template\EventDispatcher.lua
+
+core.lua
