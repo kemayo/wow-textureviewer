@@ -38,14 +38,17 @@ frame.texture:SetHeight(128)
 
 frame:EnableMouseWheel(true)
 frame:SetScript("OnMouseWheel", function(self, delta)
-    local size = self.texture:GetWidth()
+    local width = self.texture:GetWidth()
+    local height = self.texture:GetHeight()
     if delta > 0 then
-        size = size * 2
+        width = width * 2
+        height = height * 2
     else
-        size = size / 2
+        width = width / 2
+        height = height / 2
     end
-    self.texture:SetWidth(size)
-    self.texture:SetHeight(size)
+    self.texture:SetWidth(width)
+    self.texture:SetHeight(height)
 end)
 
 frame.input = CreateFrame("EditBox", nil, frame) --, "ChatFrameEditBoxTemplate")
@@ -72,6 +75,35 @@ end)
 frame.close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
 frame.close:SetPoint("TOPRIGHT", -4, -4)
 frame.close:SetScript("OnClick", function(self, button, down) frame:Hide() end)
+
+frame.xscaleup = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
+frame.xscaleup:SetText("X+")
+frame.xscaleup:SetWidth(32)
+frame.xscaleup:SetPoint("RIGHT", frame.close, "LEFT", 10)
+frame.xscaleup:SetScript("OnClick", function(self, button, down)
+    frame.texture:SetWidth(frame.texture:GetWidth() * 2)
+end)
+frame.xscaledown = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
+frame.xscaledown:SetText("X-")
+frame.xscaledown:SetWidth(32)
+frame.xscaledown:SetPoint("RIGHT", frame.xscaleup, "LEFT", 10)
+frame.xscaledown:SetScript("OnClick", function(self, button, down)
+    frame.texture:SetWidth(frame.texture:GetWidth() / 2)
+end)
+frame.yscaleup = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
+frame.yscaleup:SetText("Y+")
+frame.yscaleup:SetWidth(32)
+frame.yscaleup:SetPoint("RIGHT", frame.xscaledown, "LEFT", 15)
+frame.yscaleup:SetScript("OnClick", function(self, button, down)
+    frame.texture:SetHeight(frame.texture:GetHeight() * 2)
+end)
+frame.yscaledown = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
+frame.yscaledown:SetText("Y-")
+frame.yscaledown:SetWidth(32)
+frame.yscaledown:SetPoint("RIGHT", frame.yscaleup, "LEFT", 15)
+frame.yscaledown:SetScript("OnClick", function(self, button, down)
+    frame.texture:SetHeight(frame.texture:GetHeight() / 2)
+end)
 
 _G["SLASH_".. myname:upper().."1"] = GetAddOnMetadata(myname, "X-LoadOn-Slash")
 SlashCmdList[myname:upper()] = function(msg)
