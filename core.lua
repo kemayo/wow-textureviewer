@@ -31,11 +31,6 @@ frame.header:SetPoint("TOPLEFT", 12, -12)
 frame.header:SetFont(frame.header:GetFont(), 20, "THICKOUTLINE")
 frame.header:SetText("Texture path")
 
-frame.texture = frame:CreateTexture("ARTWORK", nil)
-frame.texture:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, 0)
-frame.texture:SetWidth(128)
-frame.texture:SetHeight(128)
-
 frame:EnableMouseWheel(true)
 frame:SetScript("OnMouseWheel", function(self, delta)
     local width = self.texture:GetWidth()
@@ -67,9 +62,21 @@ frame.input:SetPoint("BOTTOMRIGHT",-12,12)
 
 frame.input:SetScript("OnEscapePressed", function(self) frame:Hide() end)
 frame.input:SetScript("OnTextChanged", function(self, by_user_input)
-    local path = self:GetText():gsub([[\\]], [[\]])
+    local path = self:GetText():gsub([[\\]], [[\]]):gsub("%[%[", ""):gsub("%]%]", "")
     -- to be nice, replace double-slashes
+    if frame.texture then
+        frame.texture:Hide()
+    end
+
+    frame.texture = frame:CreateTexture("ARTWORK", nil)
+    frame.texture:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, 0)
+    -- frame.texture:SetWidth(128)
+    -- frame.texture:SetHeight(128)
+
     frame.texture:SetTexture(path)
+    local w,h = frame.texture:GetSize()
+    frame.texture:SetWidth(w)
+    frame.texture:SetHeight(h)
 end)
 
 frame.close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")

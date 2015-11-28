@@ -1,4 +1,4 @@
-﻿## Interface: 50400
+﻿## Interface: 60200
 ## Title: TextureViewer
 ## Notes: Show a texture on demand
 ## Version: @project-version@
