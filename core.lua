@@ -1,5 +1,10 @@
 local myname, ns = ...
 
+-- handy tests:
+-- [[Interface\Minimap\POIIcons]]
+-- "Interface\\ChatFrame\\ChatFrameBackground"
+-- "Interface\\Tooltips\\UI-Tooltip-Border"
+
 ns:RegisterEvent("ADDON_LOADED")
 function ns:ADDON_LOADED(event, addon)
     if addon ~= myname then return end
@@ -46,6 +51,8 @@ frame:SetScript("OnMouseWheel", function(self, delta)
     self.texture:SetHeight(height)
 end)
 
+frame.texture = frame:CreateTexture("ARTWORK", nil)
+
 frame.input = CreateFrame("EditBox", nil, frame) --, "ChatFrameEditBoxTemplate")
 frame.input:SetFontObject("GameFontHighlight")
 frame.input:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
@@ -62,21 +69,13 @@ frame.input:SetPoint("BOTTOMRIGHT",-12,12)
 
 frame.input:SetScript("OnEscapePressed", function(self) frame:Hide() end)
 frame.input:SetScript("OnTextChanged", function(self, by_user_input)
-    local path = self:GetText():gsub([[\\]], [[\]]):gsub("%[%[", ""):gsub("%]%]", "")
+    local path = self:GetText():gsub([[\\]], [[\]]):gsub("%[%[", ""):gsub("%]%]", ""):gsub([["]], "")
     -- to be nice, replace double-slashes
-    if frame.texture then
-        frame.texture:Hide()
-    end
-
-    frame.texture = frame:CreateTexture("ARTWORK", nil)
+    frame.texture:SetSize(0, 0)
+    frame.texture:ClearAllPoints()
     frame.texture:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, 0)
-    -- frame.texture:SetWidth(128)
-    -- frame.texture:SetHeight(128)
 
     frame.texture:SetTexture(path)
-    local w,h = frame.texture:GetSize()
-    frame.texture:SetWidth(w)
-    frame.texture:SetHeight(h)
 end)
 
 frame.close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
