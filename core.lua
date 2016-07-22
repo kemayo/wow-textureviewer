@@ -5,6 +5,7 @@ local myname, ns = ...
 -- "Interface\\ChatFrame\\ChatFrameBackground"
 -- "Interface\\Tooltips\\UI-Tooltip-Border"
 -- "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes" 0, 0.25, 0, 0.25
+-- worldquest-icon-firstaid
 
 ns:RegisterEvent("ADDON_LOADED")
 function ns:ADDON_LOADED(event, addon)
@@ -79,7 +80,9 @@ frame.input:SetScript("OnTextChanged", function(self, by_user_input)
     frame.texture:ClearAllPoints()
     frame.texture:SetPoint("TOPLEFT", frame, "TOPRIGHT", 4, 0)
 
-    frame.texture:SetTexture(path)
+    if not frame.texture:SetAtlas(path, true) then
+        frame.texture:SetTexture(path)
+    end
     frame.texcoords:Enable()
 
     frame.texcoords:GetScript("OnTextChanged")(frame.texcoords, by_user_input)
