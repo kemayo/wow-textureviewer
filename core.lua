@@ -17,7 +17,7 @@ function ns:ADDON_LOADED(event, addon)
     self.ADDON_LOADED = nil
 end
 
-local frame = CreateFrame("Frame", myname, UIParent)
+local frame = CreateFrame("Frame", myname, UIParent, "BackdropTemplate")
 frame:SetWidth(350)
 frame:SetHeight(150)
 frame:SetPoint("CENTER")
@@ -56,7 +56,7 @@ end)
 
 frame.texture = frame:CreateTexture("ARTWORK", nil)
 
-frame.input = CreateFrame("EditBox", nil, frame) --, "ChatFrameEditBoxTemplate")
+frame.input = CreateFrame("EditBox", nil, frame, "BackdropTemplate") --, "ChatFrameEditBoxTemplate")
 frame.input:SetFontObject("GameFontHighlight")
 frame.input:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
 frame.input:SetBackdrop({
@@ -100,7 +100,7 @@ frame.input:SetScript("OnLeave", function()
     GameTooltip:Hide()
 end)
 
-frame.texcoords = CreateFrame("EditBox", nil, frame)
+frame.texcoords = CreateFrame("EditBox", nil, frame, "BackdropTemplate")
 frame.texcoords:SetFontObject("GameFontHighlight")
 frame.texcoords:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
 frame.texcoords:SetBackdrop({
