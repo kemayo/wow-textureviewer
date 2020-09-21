@@ -38,10 +38,12 @@ frame.header:SetPoint("TOPLEFT", 12, -12)
 frame.header:SetFont(frame.header:GetFont(), 20, "THICKOUTLINE")
 frame.header:SetText("Texture path")
 
+frame.sizes = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+frame.sizes:SetPoint("BOTTOM", 0, 4)
+
 frame:EnableMouseWheel(true)
 frame:SetScript("OnMouseWheel", function(self, delta)
-    local width = self.texture:GetWidth()
-    local height = self.texture:GetHeight()
+    local width, height = self.texture:GetSize()
     if delta > 0 then
         width = width * 2
         height = height * 2
@@ -49,8 +51,7 @@ frame:SetScript("OnMouseWheel", function(self, delta)
         width = width / 2
         height = height / 2
     end
-    self.texture:SetWidth(width)
-    self.texture:SetHeight(height)
+    self.texture:SetSize(width, height)
 end)
 
 frame.texture = frame:CreateTexture("ARTWORK", nil)
@@ -83,8 +84,10 @@ frame.input:SetScript("OnTextChanged", function(self, by_user_input)
     if not frame.texture:SetAtlas(path, true) then
         frame.texture:SetTexture(path)
     end
-    frame.texcoords:Enable()
 
+    frame.sizes:SetFormattedText("%d x %d", frame.texture:GetSize())
+
+    frame.texcoords:Enable()
     frame.texcoords:GetScript("OnTextChanged")(frame.texcoords, by_user_input)
 end)
 frame.input:SetScript("OnEnter", function(self)
