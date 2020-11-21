@@ -1,4 +1,4 @@
-﻿## Interface: 90001
+﻿## Interface: 90002
 ## Title: TextureViewer
 ## Notes: Show a texture on demand
 ## Version: @project-version@
