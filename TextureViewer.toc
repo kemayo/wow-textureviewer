@@ -1,4 +1,4 @@
-﻿## Interface: 90002
+﻿## Interface: 110000, 110002
 ## Title: TextureViewer
 ## Notes: Show a texture on demand
 ## Version: @project-version@
@@ -12,8 +12,6 @@
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Slash: /texview
 
-lib\LibStub.lua
-lib\tekKonfigAboutPanel.lua
 template\EventDispatcher.lua
 
 core.lua

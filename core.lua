@@ -11,7 +11,7 @@ ns:RegisterEvent("ADDON_LOADED")
 function ns:ADDON_LOADED(event, addon)
     if addon ~= myname then return end
 
-    LibStub("tekKonfig-AboutPanel").new(nil, myname) -- Make first arg nil if no parent config panel
+    -- onload goes here
 
     self:UnregisterEvent("ADDON_LOADED")
     self.ADDON_LOADED = nil
@@ -169,7 +169,7 @@ frame.yscaledown:SetScript("OnClick", function(self, button, down)
     frame.texture:SetHeight(frame.texture:GetHeight() / 2)
 end)
 
-_G["SLASH_".. myname:upper().."1"] = GetAddOnMetadata(myname, "X-LoadOn-Slash")
+_G["SLASH_".. myname:upper().."1"] = C_AddOns.GetAddOnMetadata(myname, "X-LoadOn-Slash")
 SlashCmdList[myname:upper()] = function(msg)
     if frame:IsVisible() then
         frame:Hide()
