@@ -7,6 +7,8 @@ local myname, ns = ...
 -- "Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes" 0, 0.25, 0, 0.25
 -- worldquest-icon-firstaid
 
+-- /script TextureViewer:ShowWith([[Interface/Minimap/POIIcons]], C_Minimap.GetPOITextureCoords(115))
+
 ns:RegisterEvent("ADDON_LOADED")
 function ns:ADDON_LOADED(event, addon)
     if addon ~= myname then return end
@@ -177,3 +179,12 @@ SlashCmdList[myname:upper()] = function(msg)
         frame:Show()
     end
 end
+
+function frame:ShowWith(texture, ...)
+    self:Show()
+    frame.input:SetText(texture)
+    if ... then
+        frame.texcoords:SetText(string.join(", ", ...))
+    end
+end
+
