@@ -21,7 +21,7 @@ end
 
 local frame = CreateFrame("Frame", myname, UIParent, "BackdropTemplate")
 frame:SetWidth(350)
-frame:SetHeight(150)
+frame:SetHeight(200)
 frame:SetPoint("CENTER")
 frame:SetBackdrop({ bgFile = "Interface\\ChatFrame\\ChatFrameBackground", edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border", edgeSize = 16, insets = { left = 3, right = 3, top = 3, bottom = 3 } })
 frame:SetBackdropColor(0, 0, 0, 0.8)
@@ -56,19 +56,28 @@ frame:SetScript("OnMouseWheel", function(self, delta)
     self.texture:SetSize(width, height)
 end)
 
+local CreateInput = function(parent)
+    local input = CreateFrame("EditBox", nil, parent, "BackdropTemplate") --, "ChatFrameEditBoxTemplate")
+    input:SetFontObject("GameFontHighlight")
+    input:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
+    input:SetBackdrop({
+        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+        edgeSize = 16,
+        insets = { left = 4, right = 4, top = 4, bottom = 4, },
+    })
+    input:SetBackdropColor(0.1, 0.1, 0.2, 1)
+    input:SetBackdropBorderColor(0.8, 0.8, 0.9, 0.4)
+
+    input:SetScript("OnEscapePressed", function(self) parent:Hide() end)
+    input:SetScript("OnLeave", GameTooltip_Hide)
+    return input
+end
+
+
 frame.texture = frame:CreateTexture("ARTWORK", nil)
 
-frame.input = CreateFrame("EditBox", nil, frame, "BackdropTemplate") --, "ChatFrameEditBoxTemplate")
-frame.input:SetFontObject("GameFontHighlight")
-frame.input:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
-frame.input:SetBackdrop({
-    bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-    edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-    edgeSize = 16,
-    insets = { left = 4, right = 4, top = 4, bottom = 4, },
-})
-frame.input:SetBackdropColor(0.1, 0.1, 0.2, 1)
-frame.input:SetBackdropBorderColor(0.8, 0.8, 0.9, 0.4)
+frame.input = CreateInput(frame)
 frame.input:SetPoint("TOPLEFT",12,-38)
 frame.input:SetPoint("TOPRIGHT",-12,-38)
 frame.input:SetHeight(40)
@@ -98,27 +107,13 @@ frame.input:SetScript("OnEnter", function(self)
     GameTooltip:AddLine("Quotes and double-slashes will be handled automatically")
     GameTooltip:Show()
 end)
-frame.input:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-end)
 
-frame.texcoords = CreateFrame("EditBox", nil, frame, "BackdropTemplate")
-frame.texcoords:SetFontObject("GameFontHighlight")
-frame.texcoords:SetTextInsets(10, 10, 3, 3) -- left, right, top, bottom
-frame.texcoords:SetBackdrop({
-    bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-    edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-    edgeSize = 16,
-    insets = { left = 4, right = 4, top = 4, bottom = 4, },
-})
-frame.texcoords:SetBackdropColor(0.1, 0.1, 0.2, 1)
-frame.texcoords:SetBackdropBorderColor(0.8, 0.8, 0.9, 0.4)
+frame.texcoords = CreateInput(frame)
 frame.texcoords:SetPoint("TOPLEFT", frame.input, "BOTTOMLEFT", 0, -10)
 frame.texcoords:SetPoint("TOPRIGHT", frame.input, "BOTTOMRIGHT", 0, -10)
 frame.texcoords:SetHeight(frame.input:GetHeight())
 frame.texcoords:Disable()
 
-frame.texcoords:SetScript("OnEscapePressed", function(self) frame:Hide() end)
 frame.texcoords:SetScript("OnTextChanged", function(self, by_user_input)
     local coords = { string.split(",", (self:GetText():gsub("%s", ""))) }
     if 4 == #coords or 8 == #coords then
@@ -134,9 +129,37 @@ frame.texcoords:SetScript("OnEnter", function(self)
     GameTooltip:AddLine("{ULx, ULy, LLx, LLy, URx, URy, LRx, LRy}")
     GameTooltip:Show()
 end)
-frame.texcoords:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-end)
+
+local colorupdate = function(self, by_user_input)
+    local r, g, b = tonumber(frame.colorr:GetText()), tonumber(frame.colorg:GetText()), tonumber(frame.colorb:GetText())
+    frame.texture:SetVertexColor(r or 0, g or 0, b or 0)
+end
+
+frame.colorr = CreateInput(frame)
+frame.colorr:SetPoint("TOPLEFT", frame.texcoords, "BOTTOMLEFT", 0, -10)
+frame.colorr:SetWidth(frame.texcoords:GetWidth() / 3)
+frame.colorr:SetHeight(frame.input:GetHeight())
+frame.colorr:SetText("1")
+frame.colorr:SetBackdropBorderColor(1, 0, 0, 1)
+frame.colorr:SetScript("OnTextChanged", colorupdate)
+
+frame.colorg = CreateInput(frame)
+frame.colorg:SetWidth(frame.texcoords:GetWidth() / 3)
+frame.colorg:SetHeight(frame.input:GetHeight())
+frame.colorg:SetText("1")
+frame.colorg:SetBackdropBorderColor(0, 1, 0, 1)
+frame.colorg:SetScript("OnTextChanged", colorupdate)
+
+frame.colorb = CreateInput(frame)
+frame.colorb:SetPoint("TOPRIGHT", frame.texcoords, "BOTTOMRIGHT", 0, -10)
+frame.colorb:SetWidth(frame.texcoords:GetWidth() / 3)
+frame.colorb:SetHeight(frame.input:GetHeight())
+frame.colorb:SetText("1")
+frame.colorb:SetBackdropBorderColor(0, 0, 1, 1)
+frame.colorb:SetScript("OnTextChanged", colorupdate)
+
+frame.colorg:SetPoint("LEFT", frame.colorr, "RIGHT", 0, 0)
+frame.colorg:SetPoint("RIGHT", frame.colorb, "LEFT", 0, 0)
 
 frame.close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
 frame.close:SetPoint("TOPRIGHT", -4, -4)
